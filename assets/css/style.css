@@ -221,78 +221,73 @@ body.home main {
     animation: textColorChange 30s ease-in-out infinite;
 }
 
-/* Homepage side image container */
-.home-side-image {
-    position: fixed;
-    right: 0;
-    top: 55%;
-    transform: translateY(-50%);
-    width: 400px;
-    height: 600px;
-    z-index: 10;
-    padding: 20px;
+/* Checkout Custom Fields Styling */
+#billing_business_type_field,
+#billing_vat_number_field {
+    display: block !important;
+    visibility: visible !important;
 }
 
-.home-side-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Hide VAT field by default - shown conditionally via JS */
+#billing_vat_number_field {
+    display: none ;
 }
 
-/* Hide second image by default */
-.home-side-image .image-2 {
-    display: none;
+/* Style for required fields */
+#billing_business_type_field label abbr,
+#billing_vat_number_field.validate-required label abbr {
+    color: #ff0000;
+    text-decoration: none;
 }
 
-/* Keyframe to toggle images */
-@keyframes toggleImages {
-    0%, 49.9% {
-        /* Show image 1 (black background) */
-    }
-    50%, 100% {
-        /* Show image 2 (white background) */
-    }
+/* Add spacing */
+#billing_business_type_field,
+#billing_vat_number_field {
+    margin-bottom: 15px;
 }
 
-/* Animate image 1 visibility */
-.home .home-side-image .image-1 {
-    animation: imageToggle1 30s ease-in-out infinite;
+/* Automatic Discount Styling */
+.woocommerce-message.woocommerce-info,
+.woocommerce-message.woocommerce-error,
+.woocommerce-message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
 
-/* Animate image 2 visibility */
-.home .home-side-image .image-2 {
-    animation: imageToggle2 30s ease-in-out infinite;
+.woocommerce-message.woocommerce-message--info {
+    background-color: #e7f3ff;
+    border-left: 4px solid #2196F3;
 }
 
-@keyframes imageToggle1 {
-    0%, 49.9% {
-        opacity: 1;
-        display: block;
-    }
-    50%, 100% {
-        opacity: 0;
-        display: none;
-    }
+tr.fee th,
+tr.fee td {
+    color: #28a745;
+    font-weight: bold;
 }
 
-@keyframes imageToggle2 {
-    0%, 49.9% {
-        opacity: 0;
-        display: none;
-    }
-    50%, 100% {
-        opacity: 1;
-        display: block;
-    }
+
+
+/* Shipping Information Styling */
+.shipping-info th,
+.shipping-info td {
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-/* Responsive: Hide on mobile */
-@media (max-width: 768px) {
-    .home-side-image {
-        display: none;
-    }
+.shipping-info td strong {
+    color: #2196F3;
+}
+
+/* Shipping method in cart/checkout */
+.woocommerce-shipping-methods li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+}
+
+.woocommerce-shipping-methods li label {
+    font-weight: 600;
 }

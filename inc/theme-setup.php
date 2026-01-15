@@ -25,6 +25,17 @@ function mytheme_assets (){
      //js
      wp_enqueue_script( 'mytheme-script', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), null, true );
 
+     // Enqueue checkout fields script on checkout page only
+     if ( is_checkout() ) {
+         wp_enqueue_script( 
+             'mytheme-checkout-fields', 
+             get_template_directory_uri() . '/assets/js/checkout-fields.js', 
+             array('jquery', 'wc-checkout'), 
+             '1.0.0', 
+             true 
+         );
+     }
+
 }
 add_action( 'wp_enqueue_scripts', 'mytheme_assets' );
 
