@@ -7,3 +7,292 @@
     border-radius: 3px;
     margin-bottom: 5px;
 }
+
+/* Keyframe animation for header background color change */
+@keyframes headerBackgroundChange {
+    0%, 100% {
+        background-color: #000;
+    }
+    50% {
+        background-color: #fff;
+    }
+}
+
+/* Keyframe animation for header text color change */
+@keyframes headerTextColorChange {
+    0%, 100% {
+        color: #fff;
+    }
+    50% {
+        color: #000;
+    }
+}
+
+/* Header Styles */
+.site-header {
+    background-color: #000;
+    color: #fff;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Apply header animation only on homepage */
+.home .site-header {
+    animation: headerBackgroundChange 30s ease-in-out infinite;
+}
+
+/* Site Branding */
+.site-branding .site-title {
+    margin: 0;
+    font-size: 28px;
+}
+
+.site-branding .site-title a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Apply text animation only on homepage */
+.home .site-branding .site-title a {
+    animation: headerTextColorChange 30s ease-in-out infinite;
+}
+
+.site-branding .site-title a:hover {
+    color: #ff0000;
+}
+
+/* Navigation Menu */
+.main-navigation ul.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+}
+
+.main-navigation ul.menu li {
+    margin: 0;
+}
+
+.main-navigation ul.menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+/* Apply text animation only on homepage */
+.home .main-navigation ul.menu li a {
+    animation: headerTextColorChange 30s ease-in-out infinite;
+}
+
+.main-navigation ul.menu li a:hover {
+    background-color: #ff0000;
+    color: #fff;
+    animation: none;
+}
+
+/* Mini Cart */
+.header-mini-cart {
+    position: relative;
+}
+
+.mini-cart-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+/* Apply text animation only on homepage */
+.home .mini-cart-link {
+    animation: headerTextColorChange 30s ease-in-out infinite;
+}
+
+.mini-cart-link:hover {
+    color: #ff0000;
+    animation: none;
+}
+
+.mini-cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #ff0000;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.mini-cart-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background-color: #fff;
+    color: #000;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: none;
+    z-index: 1000;
+}
+
+.header-mini-cart:hover .mini-cart-content {
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .site-header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .main-navigation ul.menu {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .main-navigation ul.menu li a {
+        display: block;
+    }
+}
+
+/*Home page(page.php) with animated background*/
+
+/* Keyframe animation for background color change */
+@keyframes backgroundSlideshow {
+    0%, 100% {
+        background-color: #000;
+    }
+    50% {
+        background-color: #fff;
+    }
+}
+
+/* Keyframe animation for text color change */
+@keyframes textColorChange {
+    0%, 100% {
+        color: #fff;
+    }
+    50% {
+        color: #000;
+    }
+}
+
+/* Default body styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+}
+
+/* Apply background animation only on homepage */
+body.home {
+    animation: backgroundSlideshow 30s ease-in-out infinite;
+}
+
+main {
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* Apply text color animation only on homepage */
+body.home main {
+    animation: textColorChange 30s ease-in-out infinite;
+}
+
+/* Homepage side image container */
+.home-side-image {
+    position: fixed;
+    right: 0;
+    top: 55%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 600px;
+    z-index: 10;
+    padding: 20px;
+}
+
+.home-side-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Hide second image by default */
+.home-side-image .image-2 {
+    display: none;
+}
+
+/* Keyframe to toggle images */
+@keyframes toggleImages {
+    0%, 49.9% {
+        /* Show image 1 (black background) */
+    }
+    50%, 100% {
+        /* Show image 2 (white background) */
+    }
+}
+
+/* Animate image 1 visibility */
+.home .home-side-image .image-1 {
+    animation: imageToggle1 30s ease-in-out infinite;
+}
+
+/* Animate image 2 visibility */
+.home .home-side-image .image-2 {
+    animation: imageToggle2 30s ease-in-out infinite;
+}
+
+@keyframes imageToggle1 {
+    0%, 49.9% {
+        opacity: 1;
+        display: block;
+    }
+    50%, 100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@keyframes imageToggle2 {
+    0%, 49.9% {
+        opacity: 0;
+        display: none;
+    }
+    50%, 100% {
+        opacity: 1;
+        display: block;
+    }
+}
+
+/* Responsive: Hide on mobile */
+@media (max-width: 768px) {
+    .home-side-image {
+        display: none;
+    }
+}
