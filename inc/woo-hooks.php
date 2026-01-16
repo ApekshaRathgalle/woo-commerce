@@ -48,7 +48,9 @@ function display_product_badge(){
          $badge = get_post_meta($product -> get_id() , '_product_badge', true );
 
             if ( $badge ) {
-                echo '<span class="custom-product-badge">' . esc_html(ucfirst( $badge ) ). '</span>';
-
+                // Add specific class for each badge type
+                $badge_class = 'custom-product-badge badge-' . esc_attr($badge);
+                echo '<span class="' . $badge_class . '">' . esc_html(ucfirst( $badge ) ). '</span>';
             }
 }add_action( 'woocommerce_before_shop_loop_item_title', 'display_product_badge');
+

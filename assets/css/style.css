@@ -8,40 +8,15 @@
     margin-bottom: 5px;
 }
 
-/* Keyframe animation for header background color change */
-@keyframes headerBackgroundChange {
-    0%, 100% {
-        background-color: #000;
-    }
-    50% {
-        background-color: #fff;
-    }
-}
-
-/* Keyframe animation for header text color change */
-@keyframes headerTextColorChange {
-    0%, 100% {
-        color: #fff;
-    }
-    50% {
-        color: #000;
-    }
-}
-
 /* Header Styles */
 .site-header {
-    background-color: #000;
-    color: #fff;
+    background-color: #fff;
+    color: #000;
     padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Apply header animation only on homepage */
-.home .site-header {
-    animation: headerBackgroundChange 30s ease-in-out infinite;
 }
 
 /* Site Branding */
@@ -51,14 +26,9 @@
 }
 
 .site-branding .site-title a {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     transition: color 0.3s ease;
-}
-
-/* Apply text animation only on homepage */
-.home .site-branding .site-title a {
-    animation: headerTextColorChange 30s ease-in-out infinite;
 }
 
 .site-branding .site-title a:hover {
@@ -79,7 +49,7 @@
 }
 
 .main-navigation ul.menu li a {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
@@ -88,15 +58,9 @@
     transition: all 0.3s ease;
 }
 
-/* Apply text animation only on homepage */
-.home .main-navigation ul.menu li a {
-    animation: headerTextColorChange 30s ease-in-out infinite;
-}
-
 .main-navigation ul.menu li a:hover {
     background-color: #ff0000;
     color: #fff;
-    animation: none;
 }
 
 /* Mini Cart */
@@ -105,7 +69,7 @@
 }
 
 .mini-cart-link {
-    color: #fff;
+    color: #000;
     text-decoration: none;
     font-size: 24px;
     position: relative;
@@ -113,14 +77,8 @@
     transition: color 0.3s ease;
 }
 
-/* Apply text animation only on homepage */
-.home .mini-cart-link {
-    animation: headerTextColorChange 30s ease-in-out infinite;
-}
-
 .mini-cart-link:hover {
     color: #ff0000;
-    animation: none;
 }
 
 .mini-cart-count {
@@ -177,49 +135,261 @@
     }
 }
 
-/*Home page(page.php) with animated background*/
-
-/* Keyframe animation for background color change */
-@keyframes backgroundSlideshow {
-    0%, 100% {
-        background-color: #000;
-    }
-    50% {
-        background-color: #fff;
-    }
-}
-
-/* Keyframe animation for text color change */
-@keyframes textColorChange {
-    0%, 100% {
-        color: #fff;
-    }
-    50% {
-        color: #000;
-    }
-}
-
 /* Default body styles */
 body {
     margin: 0;
     padding: 0;
-    background-color: #fff;
-}
-
-/* Apply background animation only on homepage */
-body.home {
-    animation: backgroundSlideshow 30s ease-in-out infinite;
+    background-color: #ffffff;
+    color: #000;
 }
 
 main {
     padding: 40px 20px;
     min-height: 100vh;
+    background-color: #ffffff;
 }
 
-/* Apply text color animation only on homepage */
-body.home main {
-    animation: textColorChange 30s ease-in-out infinite;
+
+
+/* Below Banner Content */
+.below-banner-content {
+    max-width: 1200px;
+    margin: 40px auto 20px;
+    padding: 30px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 50px;
 }
+
+.content-text {
+    flex: 1;
+    text-align: left;
+}
+
+.content-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+}
+
+.content-image {
+    flex: 0 0 400px;
+    max-width: 400px;
+}
+
+.content-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .below-banner-content {
+        flex-direction: column;
+        margin: 30px auto 15px;
+        padding: 0 15px;
+    }
+    
+    .content-text p {
+        font-size: 14px;
+    }
+    
+    .content-image {
+        flex: 1;
+        max-width: 100%;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .below-banner-content {
+        margin: 30px auto 15px;
+        padding: 0 15px;
+        max-width: 100%;
+        margin-left: auto;
+    }
+    
+    .below-banner-content p {
+        font-size: 14px;
+    }
+}
+
+.homepage-banner {
+    background: #ffffff;
+    padding: 0;
+    margin: 5px auto 20px;
+    max-width: 1200px;
+    min-height: 500px;
+    border-radius: 26px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Slideshow Container */
+.slideshow-container {
+    width: 100%;
+    height: 500px;
+    position: relative;
+}
+
+/* Individual Slides */
+.slide {
+    display: none;
+    width: 100%;
+    height: 500px;
+    padding: 100px 40px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    animation-name: fadeEffect;
+    animation-duration: 1s;
+}
+
+.slide.active {
+    display: flex;
+}
+
+/* Different colors for each slide */
+.slide:nth-child(1) {
+    background: linear-gradient(135deg, #550404 0%, #280202 100%);
+}
+
+.slide:nth-child(2) {
+    background: linear-gradient(135deg, #010620 0%, #00061c 100%);
+}
+
+.slide:nth-child(3) {
+    background: linear-gradient(135deg, #000000 0%, #ffffff 100%);
+}
+
+.slide:nth-child(4) {
+    background: linear-gradient(135deg, #1c1402 0%, #5e3b01 100%);
+}
+
+.slide:nth-child(5) {
+    background: linear-gradient(135deg, #000000 0%, #2d2d2d 100%);
+}
+
+/* Slide Content */
+.slide h2 {
+    color: #fff;
+    font-size: 48px;
+    margin: 0 0 20px 0;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.slide p {
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 30px 0;
+    opacity: 0.95;
+}
+
+.slide-btn {
+    display: inline-block;
+    background-color: #fff;
+    color: #333;
+    padding: 15px 40px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    justify-content: flex-start;
+}
+
+.slide-btn:hover {
+    background-color: #000;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+/* Slide Content - Left Side */
+.slide-content {
+    flex: 1;
+    text-align: left; /* Changed from center */
+    padding-right: 40px;
+    max-width: 50%;
+}
+
+/* Slide Image - Right Side */
+.slide-image {
+    flex: 1;
+    max-width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-image img {
+    max-width: 100%;
+    height: auto;
+    
+    
+}
+/* Fade animation */
+@keyframes fadeEffect {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .homepage-banner {
+        min-height: 400px;
+        margin: 15px;
+    }
+
+    .slideshow-container {
+        height: 400px;
+    }
+
+    .slide {
+        height: 400px;
+        padding: 40px 20px;
+        flex-direction: column; /* Stack on mobile */
+        justify-content: center;
+    }
+
+    .slide-content {
+        max-width: 100%;
+        padding-right: 0;
+        text-align: center; /* Center on mobile */
+        margin-bottom: 20px;
+    }
+
+    .slide-image {
+        max-width: 100%;
+        display: none; /* Hide images on mobile or show smaller */
+    }
+
+    .slide h2 {
+        font-size: 32px;
+        text-align: center; /* Center on mobile */
+    }
+
+    .slide p {
+        font-size: 16px;
+        text-align: center; /* Center on mobile */
+    }
+
+    .slide-btn {
+        padding: 12px 30px;
+        font-size: 14px;
+    }
+}
+
 
 /* Checkout Custom Fields Styling */
 #billing_business_type_field,
@@ -266,8 +436,6 @@ tr.fee td {
     font-weight: bold;
 }
 
-
-
 /* Shipping Information Styling */
 .shipping-info th,
 .shipping-info td {
@@ -291,3 +459,307 @@ tr.fee td {
 .woocommerce-shipping-methods li label {
     font-weight: 600;
 }
+
+#billing_vat_number_field label abbr.required {
+    color: #ff0000;
+    text-decoration: none;
+    border: none;
+}
+
+#billing_vat_number_field.validate-required label abbr.required {
+    color: #ff0000;
+}
+
+.woocommerce-result-count {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px 0;
+    padding: 15px 20px;
+    background: #f8f8f8;
+    border-left: 3px solid #000;
+    font-weight: 500;
+}
+
+.woocommerce-page,
+.woocommerce {
+    background-color: #ffffff; 
+    min-height: 100vh;
+}
+
+/* Base badge styling */
+.custom-product-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 3px;
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    z-index: 10;
+    margin: 0;
+}
+
+/* Local badge - Green theme */
+.custom-product-badge.badge-local {
+    background: #ffffff; /* Green */
+    color: #fff;
+}
+
+/* Imported badge - Black/Red theme */
+.custom-product-badge.badge-imported {
+    background: #000; /* Black */
+    color: #fff;
+}
+
+
+.custom-product-badge.badge-local {
+    background: #d667d1;
+    color: #000;
+}
+
+.custom-product-badge.badge-imported {
+    background: #070264;
+    color: #fff;
+}
+
+
+
+/* Hover effects for badges */
+.custom-product-badge.badge-local:hover {
+    background: #218838; /* Darker green */
+}
+
+.custom-product-badge.badge-imported:hover {
+    background: #ff0000; /* Red on hover */
+}
+
+
+/* ========================================
+   FOOTER STYLES
+======================================== */
+
+.site-footer {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #ffffff;
+    padding: 60px 0 0;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.footer-column h3,
+.footer-column h4 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.footer-column h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.footer-tagline {
+    color: #cccccc;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* Social Icons */
+.footer-social {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-social a {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.footer-social a:hover {
+    transform: translateY(-3px);
+}
+
+.social-icon {
+    font-size: 24px;
+}
+
+/* Footer Links */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    padding-left: 5px;
+}
+
+/* Newsletter Form */
+.newsletter-form {
+    margin-top: 15px;
+}
+
+.newsletter-form p {
+    color: #cccccc;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.newsletter-form input[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444;
+    background: #333;
+    color: #fff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.newsletter-form input[type="email"]::placeholder {
+    color: #888;
+}
+
+.newsletter-form input[type="email"]:focus {
+    outline: none;
+    border-color: #666;
+    background: #3a3a3a;
+}
+
+.newsletter-form button {
+    width: 100%;
+    padding: 12px 20px;
+    background: #ffffff;
+    color: #000;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.newsletter-form button:hover {
+    background: #ff0000;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+    border-top: 1px solid #444;
+    padding: 25px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-bottom p {
+    color: #999;
+    font-size: 13px;
+    margin: 0;
+}
+
+.footer-payment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #999;
+    font-size: 13px;
+}
+
+.payment-icon {
+    font-size: 20px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.payment-icon:hover {
+    opacity: 1;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 40px 0 0;
+        margin-top: 60px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 0 20px 30px;
+    }
+
+    .footer-column {
+        text-align: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .footer-payment {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-column h3 {
+        font-size: 20px;
+    }
+
+    .footer-column h4 {
+        font-size: 16px;
+    }
+
+    .newsletter-form input[type="email"],
+    .newsletter-form button {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
+}
+
+
+

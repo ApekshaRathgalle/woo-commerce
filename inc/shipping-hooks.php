@@ -17,6 +17,7 @@ function theme_custom_shipping_method_init() {
     
     if ( ! class_exists( 'WC_Theme_Location_Shipping' ) ) {
         
+    //this class extends the WC_Shipping_Method class provided by WooCommerce is inheritance
         class WC_Theme_Location_Shipping extends WC_Shipping_Method {
             
             /**

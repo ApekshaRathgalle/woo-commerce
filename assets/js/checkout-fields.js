@@ -18,13 +18,39 @@ jQuery(function($) {
             
             if (country && businessType === 'company') {
                 $('#billing_vat_number_field').slideDown(300).addClass('validate-required');
+                
+                // Add required attribute to the input field
+                $('#billing_vat_number').prop('required', true);
+                
+                // Add "required" class and asterisk to label
                 $('#billing_vat_number_field label').addClass('required');
-                console.log('✓ VAT shown');
+                
+                // Update label text to show it's required (remove "optional")
+                var label = $('#billing_vat_number_field label .optional');
+                if (label.length) {
+                    label.remove();
+                }
+                
+                // Add asterisk if not already present
+                if ($('#billing_vat_number_field label abbr.required').length === 0) {
+                    $('#billing_vat_number_field label').append(' <abbr class="required" title="required">*</abbr>');
+                }
+                
+                console.log('✓ VAT shown (REQUIRED)');
             } else {
                 $('#billing_vat_number_field').slideUp(300).removeClass('validate-required');
+                
+                // Remove required attribute
+                $('#billing_vat_number').prop('required', false);
+                
+                // Remove required class and asterisk
                 $('#billing_vat_number_field label').removeClass('required');
+                $('#billing_vat_number_field label abbr.required').remove();
+                
+                // Clear the value
                 $('#billing_vat_number').val('');
-                console.log('✗ VAT hidden');
+                
+                console.log('✗ VAT hidden (NOT required)');
             }
         },
         

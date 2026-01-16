@@ -26,7 +26,7 @@ function theme_add_checkout_fields( $fields ) {
         'priority'    => 25,
     );
 
-    // VAT Number Field - Hidden by default via CSS
+    // VAT Number Field 
     $fields['billing']['billing_vat_number'] = array(
         'type'        => 'text',
         'label'       => __('VAT Number', 'mytheme'),
