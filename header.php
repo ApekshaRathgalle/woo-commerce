@@ -47,7 +47,7 @@
             </span>
         </a>
 
-        <!-- AJAX cart content will load here -->
+        <!-- AJAX cart content  load here -->
         <div class="mini-cart-content">
             <?php woocommerce_mini_cart(); ?>
         </div>

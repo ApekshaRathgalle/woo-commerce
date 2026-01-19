@@ -7,9 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 add_filter( 'woocommerce_checkout_fields', 'theme_add_checkout_fields', 20 );
 function theme_add_checkout_fields( $fields ) {
-    error_log('=== Custom Checkout Fields: Function Called ===');
-    error_log('Current URL: ' . $_SERVER['REQUEST_URI']);
-    error_log('Is checkout: ' . (is_checkout() ? 'YES' : 'NO'));
+    
     
     // Business Type Field - Place after email field
     $fields['billing']['billing_business_type'] = array(
@@ -70,7 +68,7 @@ function theme_validate_checkout_fields() {
         if ( empty($vat_number) ) {
             wc_add_notice( __( 'VAT Number is required for companies.', 'mytheme' ), 'error' );
             error_log('Validation Error: VAT Number required for company');
-        } elseif ( strlen($vat_number) < 8 ) {
+        } elseif ( strlen($vat_number) < 8 ) { //strlen = string length gets number of characters
             wc_add_notice( __( 'Please enter a valid VAT Number (minimum 8 characters).', 'mytheme' ), 'error' );
             error_log('Validation Error: VAT Number too short');
         }
@@ -105,7 +103,7 @@ function theme_save_checkout_fields( $order_id ) {
  * 4️⃣ Display fields in Admin Order screen
  */
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'theme_display_checkout_fields_in_admin', 10, 1 );
-function theme_display_checkout_fields_in_admin( $order ){
+function theme_display_checkout_fields_in_admin( $order ){ //$order is a instance of WC_Order class
     $business_type = get_post_meta( $order->get_id(), '_billing_business_type', true );
     $vat_number    = get_post_meta( $order->get_id(), '_billing_vat_number', true );
 
@@ -146,6 +144,7 @@ function theme_add_checkout_fields_to_emails( $fields, $sent_to_admin, $order ) 
 /**
  * 6️⃣ Detect if page has checkout shortcode
  */
+/* 
 function has_checkout_shortcode() {
     global $post;
     
@@ -159,4 +158,4 @@ function has_checkout_shortcode() {
     
     return false;
 }
-
+**/

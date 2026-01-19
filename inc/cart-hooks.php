@@ -12,7 +12,7 @@ function theme_update_header_mini_cart( $fragments ) {
     //fragemnt - small pieces of HTML that woocommerce can update via ajax
     // two fragments- 1: get cart count, 2: get mini cart content
     // Update cart count 
-    ob_start(); //starts output buffering. before sending output to browser html stores it as a string
+    ob_start(); //starts output buffering. before sending output to browser html stores it as a string in buffer
     ?>
     <span class="mini-cart-count">
         <?php echo WC()->cart->get_cart_contents_count(); ?>

@@ -21,7 +21,7 @@ function theme_custom_shipping_method_init() {
         class WC_Theme_Location_Shipping extends WC_Shipping_Method {
             
             /**
-             * Constructor
+             * Constructor (encapsulation)
              */
             public function __construct( $instance_id = 0 ) {
                 $this->id                 = 'theme_location_shipping';

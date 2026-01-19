@@ -1,5 +1,5 @@
 jQuery(function($) {
-    'use strict';
+    'use strict'; //use strict mode for better error checking
     
     console.log('=== Checkout Fields JS File Loaded ===');
     
@@ -25,7 +25,7 @@ jQuery(function($) {
                 // Add "required" class and asterisk to label
                 $('#billing_vat_number_field label').addClass('required');
                 
-                // Update label text to show it's required (remove "optional")
+                // Update label text to show it's required 
                 var label = $('#billing_vat_number_field label .optional');
                 if (label.length) {
                     label.remove();
@@ -54,7 +54,7 @@ jQuery(function($) {
             }
         },
         
-        bindEvents: function() {
+        bindEvents: function() { //sets up event listeners for field changes and checkout updates
             var self = this;
             
             $(document.body).on('change', '#billing_business_type, #billing_country', function() {
