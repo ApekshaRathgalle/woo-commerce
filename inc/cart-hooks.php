@@ -49,60 +49,96 @@ function theme_auto_discount_on_subtotal( $cart ) {
         return;
     }
 
+    // Check if discount is enabled
+    $discount_enabled = get_option( 'auto_discount_enable', 'yes' );
+    if ( $discount_enabled !== 'yes' ) {
+        return;
+    }
+
     // Get cart subtotal (before discounts and shipping)
     $subtotal = $cart->get_subtotal();
     
-    // Discount threshold (20,000 LKR) , minimum subtotal required for discount
-    $threshold = 20000;
-    
-    // Discount percentage
-    $discount_percentage = 20;
+    // Get settings from admin
+    $threshold = (float) get_option( 'auto_discount_threshold', 20000 );
+    $discount_type = get_option( 'auto_discount_type', 'percentage' );
+    $discount_percentage = (float) get_option( 'auto_discount_percentage', 20 );
+    $discount_fixed = (float) get_option( 'auto_discount_fixed_amount', 5000 );
     
     // Check if subtotal exceeds threshold
     if ( $subtotal > $threshold ) {
-        // Calculate discount amount (20% of subtotal)
-        $discount_amount = ( $subtotal * $discount_percentage ) / 100;
+        
+        // Calculate discount based on type
+        if ( $discount_type === 'percentage' ) {
+            $discount_amount = ( $subtotal * $discount_percentage ) / 100;
+            $discount_label = sprintf( 
+                __( 'Automatic Discount (%s%%)', 'mytheme' ), 
+                $discount_percentage 
+            );
+        } else {
+            $discount_amount = $discount_fixed;
+            $discount_label = __( 'Automatic Discount', 'mytheme' );
+        }
         
         // Add discount as a negative fee
-        $cart->add_fee( 
-            //__() is for translation to other languages
-            sprintf( __( 'Automatic Discount (%d%% off)', 'mytheme' ), $discount_percentage ), 
-            -$discount_amount, 
-            false 
-        );
+        $cart->add_fee( $discount_label, -$discount_amount, false );
         
         error_log( sprintf( 
-            'Auto Discount Applied: Subtotal: %s LKR, Discount: %s LKR', 
+            'Auto Discount Applied: Type: %s, Subtotal: %s LKR, Discount: %s LKR', 
+            $discount_type,
             number_format( $subtotal, 2 ), 
             number_format( $discount_amount, 2 ) 
         ) );
     }
 }
 
+
 /**
  * Display discount message in cart
  */
 add_action( 'woocommerce_before_cart', 'theme_display_discount_message' );
 function theme_display_discount_message() {
+    
+    // Check if discount is enabled
+    if ( get_option( 'auto_discount_enable', 'yes' ) !== 'yes' ) {
+        return;
+    }
+    
     $subtotal = WC()->cart->get_subtotal();
-    $threshold = 20000;
+    $threshold = (float) get_option( 'auto_discount_threshold', 20000 );
+    $discount_type = get_option( 'auto_discount_type', 'percentage' );
+    $discount_percentage = (float) get_option( 'auto_discount_percentage', 20 );
+    $discount_fixed = (float) get_option( 'auto_discount_fixed_amount', 5000 );
     
     if ( $subtotal > $threshold ) {
-        $discount_percentage = 20;
-        wc_print_notice( 
-            sprintf( 
-                __( '🎉 Congratulations! You received a %d%% automatic discount on orders above %s LKR!', 'mytheme' ), 
+        // Show success message
+        if ( $discount_type === 'percentage' ) {
+            $message = sprintf( 
+                __( '🎉 Congratulations! You received a %s%%  discount on orders above %s LKR!', 'mytheme' ), 
                 $discount_percentage, 
                 number_format( $threshold, 2 ) 
-            ), 
-            'success' 
-        );
+            );
+        } else {
+            $message = sprintf( 
+                __( '🎉 Congratulations! You received a %s LKR discount on orders above %s LKR!', 'mytheme' ), 
+                number_format( $discount_fixed, 2 ),
+                number_format( $threshold, 2 ) 
+            );
+        }
+        wc_print_notice( $message, 'success' );
     } else {
+        // Show notice about remaining amount
         $remaining = $threshold - $subtotal;
+        if ( $discount_type === 'percentage' ) {
+            $benefit = sprintf( __( 'get %s%% off', 'mytheme' ), $discount_percentage );
+        } else {
+            $benefit = sprintf( __( 'save %s LKR', 'mytheme' ), number_format( $discount_fixed, 2 ) );
+        }
+        
         wc_print_notice( 
             sprintf( 
-                __( 'Add %s LKR more to your cart to get 20%% automatic discount!', 'mytheme' ), 
-                number_format( $remaining, 2 ) 
+                __( 'Add %s LKR more to your cart to %s!', 'mytheme' ), 
+                number_format( $remaining, 2 ),
+                $benefit
             ), 
             'notice' 
         );
@@ -114,17 +150,128 @@ function theme_display_discount_message() {
  */
 add_action( 'woocommerce_before_checkout_form', 'theme_display_checkout_discount_message', 5 );
 function theme_display_checkout_discount_message() {
+    
+    // Check if discount is enabled
+    if ( get_option( 'auto_discount_enable', 'yes' ) !== 'yes' ) {
+        return;
+    }
+    
     $subtotal = WC()->cart->get_subtotal();
-    $threshold = 20000;
+    $threshold = (float) get_option( 'auto_discount_threshold', 20000 );
+    $discount_type = get_option( 'auto_discount_type', 'percentage' );
+    $discount_percentage = (float) get_option( 'auto_discount_percentage', 20 );
     
     if ( $subtotal > $threshold ) {
-        $discount_percentage = 20;
-        wc_print_notice( 
-            sprintf( 
-                __( '🎉 Your order qualifies for a %d%% automatic discount!', 'mytheme' ), 
+        if ( $discount_type === 'percentage' ) {
+            $message = sprintf( 
+                __( '🎉 Your order qualifies for a %s%%  discount!', 'mytheme' ), 
                 $discount_percentage 
-            ), 
-            'success' 
-        );
+            );
+        } else {
+            $message = __( '🎉 Your order qualifies for an  discount!', 'mytheme' );
+        }
+        
+        wc_print_notice( $message, 'success' );
     }
+}
+
+
+/**
+ * Add settings section for automatic discounts
+ */
+add_filter( 'woocommerce_get_sections_products', 'theme_add_discount_section' );
+function theme_add_discount_section( $sections ) {
+    $sections['auto_discount'] = __( 'Automatic Discounts', 'mytheme' );
+    return $sections;
+}
+
+/**
+ * Add settings fields for automatic discounts
+ */
+add_filter( 'woocommerce_get_settings_products', 'theme_add_discount_settings', 10, 2 );
+function theme_add_discount_settings( $settings, $current_section ) {
+    
+    if ( 'auto_discount' !== $current_section ) {
+        return $settings;
+    }
+    
+    $custom_settings = array();
+    
+    // Section Title
+    $custom_settings[] = array(
+        'name' => __( 'Automatic Discount Settings', 'mytheme' ),
+        'type' => 'title',
+        'desc' => __( 'Configure automatic discounts based on cart subtotal', 'mytheme' ),
+        'id'   => 'auto_discount_settings',
+    );
+    
+    // Enable/Disable Discount
+    $custom_settings[] = array(
+        'name'    => __( 'Enable Automatic Discount', 'mytheme' ),
+        'desc'    => __( 'Enable automatic discount when cart subtotal exceeds threshold', 'mytheme' ),
+        'id'      => 'auto_discount_enable',
+        'type'    => 'checkbox',
+        'default' => 'yes',
+    );
+    
+    // Discount Threshold
+    $custom_settings[] = array(
+        'name'              => __( 'Discount Threshold', 'mytheme' ),
+        'desc'              => __( 'Minimum cart subtotal (in LKR) required to apply discount', 'mytheme' ),
+        'id'                => 'auto_discount_threshold',
+        'type'              => 'number',
+        'default'           => '20000',
+        'custom_attributes' => array(
+            'min'  => '0',
+            'step' => '100',
+        ),
+    );
+    
+    // Discount Percentage
+    $custom_settings[] = array(
+        'name'              => __( 'Discount Percentage', 'mytheme' ),
+        'desc'              => __( 'Percentage discount to apply (e.g., 20 for 20%)', 'mytheme' ),
+        'id'                => 'auto_discount_percentage',
+        'type'              => 'number',
+        'default'           => '20',
+        'custom_attributes' => array(
+            'min'  => '0',
+            'max'  => '100',
+            'step' => '1',
+        ),
+    );
+    
+    // Discount Type
+    $custom_settings[] = array(
+        'name'    => __( 'Discount Type', 'mytheme' ),
+        'desc'    => __( 'Choose between percentage or fixed amount discount', 'mytheme' ),
+        'id'      => 'auto_discount_type',
+        'type'    => 'select',
+        'options' => array(
+            'percentage' => __( 'Percentage (%)', 'mytheme' ),
+            'fixed'      => __( 'Fixed Amount (LKR)', 'mytheme' ),
+        ),
+        'default' => 'percentage',
+    );
+    
+    // Fixed Discount Amount
+    $custom_settings[] = array(
+        'name'              => __( 'Fixed Discount Amount', 'mytheme' ),
+        'desc'              => __( 'Fixed discount amount in LKR (only if Fixed Amount is selected)', 'mytheme' ),
+        'id'                => 'auto_discount_fixed_amount',
+        'type'              => 'number',
+        'default'           => '5000',
+        'custom_attributes' => array(
+            'min'  => '0',
+            'step' => '100',
+        ),
+    );
+    
+    // Section End
+    $custom_settings[] = array(
+        'type' => 'sectionend',
+        'id'   => 'auto_discount_settings',
+    );
+    
+    return $custom_settings;
 }

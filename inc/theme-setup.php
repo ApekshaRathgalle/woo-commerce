@@ -35,6 +35,19 @@ function mytheme_assets (){
              true 
          );
      }
+    
+    // Enqueue variation buttons script on single product pages
+     if ( is_product() ) {
+         wp_enqueue_script( 
+             'variation-buttons', 
+             get_template_directory_uri() . '/assets/js/variation-buttons.js', 
+             array('jquery', 'wc-add-to-cart-variation'), // Added proper dependency
+             filemtime( get_template_directory() . '/assets/js/variation-buttons.js' ), // Cache busting
+             true 
+         );
+     }
+     
+
 
 }
 add_action( 'wp_enqueue_scripts', 'mytheme_assets' );

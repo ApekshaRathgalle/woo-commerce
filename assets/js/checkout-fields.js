@@ -1,5 +1,5 @@
 jQuery(function($) {
-    'use strict'; //use strict mode for better error checking
+    'use strict';
     
     console.log('=== Checkout Fields JS File Loaded ===');
     
@@ -18,20 +18,14 @@ jQuery(function($) {
             
             if (country && businessType === 'company') {
                 $('#billing_vat_number_field').slideDown(300).addClass('validate-required');
-                
-                // Add required attribute to the input field
                 $('#billing_vat_number').prop('required', true);
-                
-                // Add "required" class and asterisk to label
                 $('#billing_vat_number_field label').addClass('required');
                 
-                // Update label text to show it's required 
                 var label = $('#billing_vat_number_field label .optional');
                 if (label.length) {
                     label.remove();
                 }
                 
-                // Add asterisk if not already present
                 if ($('#billing_vat_number_field label abbr.required').length === 0) {
                     $('#billing_vat_number_field label').append(' <abbr class="required" title="required">*</abbr>');
                 }
@@ -39,32 +33,44 @@ jQuery(function($) {
                 console.log('✓ VAT shown (REQUIRED)');
             } else {
                 $('#billing_vat_number_field').slideUp(300).removeClass('validate-required');
-                
-                // Remove required attribute
                 $('#billing_vat_number').prop('required', false);
-                
-                // Remove required class and asterisk
                 $('#billing_vat_number_field label').removeClass('required');
                 $('#billing_vat_number_field label abbr.required').remove();
-                
-                // Clear the value
                 $('#billing_vat_number').val('');
                 
                 console.log('✗ VAT hidden (NOT required)');
             }
         },
         
-        bindEvents: function() { //sets up event listeners for field changes and checkout updates
+        updateCurrency: function() {
+            var country = $('#billing_country').val();
+            
+            if (country) {
+                console.log('Country changed to:', country, '- Updating currency...');
+                
+                // Trigger WooCommerce checkout update to refresh prices
+                $(document.body).trigger('update_checkout');
+            }
+        },
+        
+        bindEvents: function() {
             var self = this;
             
             $(document.body).on('change', '#billing_business_type, #billing_country', function() {
                 console.log('Field changed:', this.id);
                 self.toggleVATField();
+                
+                // Update currency when country changes
+                if (this.id === 'billing_country') {
+                    self.updateCurrency();
+                }
             });
             
             $(document.body).on('updated_checkout', function() {
                 console.log('updated_checkout event');
-                setTimeout(function() { self.toggleVATField(); }, 100);
+                setTimeout(function() { 
+                    self.toggleVATField(); 
+                }, 100);
             });
             
             $(document.body).on('init_checkout', function() {
@@ -78,7 +84,6 @@ jQuery(function($) {
     $(document).ready(function() {
         console.log('Document ready - waiting for fields');
         
-        // Try multiple times to ensure fields are loaded
         var attempts = 0;
         var maxAttempts = 10;
         
@@ -97,4 +102,8 @@ jQuery(function($) {
             }
         }, 500);
     });
+});
+
+$(document.body).on('updated_checkout', function() {
+    console.log('Checkout updated - custom review refreshed');
 });
