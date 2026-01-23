@@ -5,13 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Multi-Currency Support Based on Country
+ * Multi-Currency Support Based on Country Selection at Checkout Only
  */
 
 // Define currency mappings for countries
 function theme_get_country_currency_map() {
     return array(
-        'LK' => array('code' => 'LKR', 'symbol' => 'Rs.', 'rate' => 1),        // Sri Lanka
+        'LK' => array('code' => 'LKR', 'symbol' => 'Rs.', 'rate' => 1),        // Sri Lanka (base)
         'US' => array('code' => 'USD', 'symbol' => '$', 'rate' => 0.0031),     // United States
         'GB' => array('code' => 'GBP', 'symbol' => '£', 'rate' => 0.0024),     // United Kingdom
         'EU' => array('code' => 'EUR', 'symbol' => '€', 'rate' => 0.0028),     // European Union
@@ -26,7 +26,7 @@ function theme_get_country_currency_map() {
 }
 
 /**
- * Get currency based on country
+ * Get currency based on country - DEFAULT TO LKR
  */
 function theme_get_currency_by_country($country_code) {
     $currency_map = theme_get_country_currency_map();
@@ -36,19 +36,12 @@ function theme_get_currency_by_country($country_code) {
         return $currency_map[$country_code];
     }
     
-    // Default to LKR for Asian countries
-    $asian_countries = array('AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'BN', 'KH', 'GE', 'ID', 'IR', 'IQ', 'IL', 'JO', 'KZ', 'KW', 'KG', 'LA', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'KR', 'SY', 'TJ', 'TH', 'TR', 'TM', 'UZ', 'VN', 'YE');
-    
-    if (in_array($country_code, $asian_countries)) {
-        return $currency_map['LK']; // Use LKR for other Asian countries
-    }
-    
-    // Default to USD for other countries
-    return array('code' => 'USD', 'symbol' => '$', 'rate' => 0.0031);
+    // DEFAULT TO LKR FOR ALL OTHER COUNTRIES
+    return $currency_map['LK'];
 }
 
 /**
- * Store selected currency in session
+ * Store selected currency in session ONLY during checkout
  */
 add_action('woocommerce_checkout_update_order_review', 'theme_update_currency_on_country_change');
 function theme_update_currency_on_country_change($post_data) {
@@ -57,12 +50,15 @@ function theme_update_currency_on_country_change($post_data) {
         return;
     }
     
-    parse_str($post_data, $data);
+    parse_str($post_data, $data);// Convert serialized data (string) to array
     
     if (isset($data['billing_country'])) {
         $country = sanitize_text_field($data['billing_country']);
         $currency_data = theme_get_currency_by_country($country);
         
+        //📌wc_session = WooCommerce session to store data across pages
+        //creates unique session ID and store as a cookie in browser
+        //sessions are stored in database table wp_woocommerce_sessions
         WC()->session->set('selected_currency', $currency_data['code']);
         WC()->session->set('selected_currency_rate', $currency_data['rate']);
         WC()->session->set('selected_currency_symbol', $currency_data['symbol']);
@@ -72,10 +68,15 @@ function theme_update_currency_on_country_change($post_data) {
 }
 
 /**
- * Change WooCommerce currency based on session
+ * Change currency  on checkout page
  */
 add_filter('woocommerce_currency', 'theme_change_currency');
 function theme_change_currency($currency) {
+    //  apply on checkout page
+    if ( ! is_checkout() ) {
+        return 'LKR'; // Always LKR outside checkout
+    }
+    
     // Check if WooCommerce session exists
     if ( ! is_admin() && WC() && WC()->session ) {
         $selected_currency = WC()->session->get('selected_currency');
@@ -85,14 +86,19 @@ function theme_change_currency($currency) {
         }
     }
     
-    return $currency; 
+    return 'LKR'; // Default to LKR
 }
 
 /**
- * Change currency symbol
+ * Change currency symbol ONLY on checkout page
  */
 add_filter('woocommerce_currency_symbol', 'theme_change_currency_symbol', 10, 2);
 function theme_change_currency_symbol($currency_symbol, $currency) {
+    // ONLY apply on checkout page
+    if ( ! is_checkout() ) {
+        return 'Rs.'; // Always LKR symbol outside checkout
+    }
+    
     // Check if WooCommerce session exists
     if ( ! is_admin() && WC() && WC()->session ) {
         $custom_symbol = WC()->session->get('selected_currency_symbol');
@@ -102,11 +108,11 @@ function theme_change_currency_symbol($currency_symbol, $currency) {
         }
     }
     
-    return $currency_symbol;
+    return 'Rs.'; // Default to LKR symbol
 }
 
 /**
- * Convert prices based on exchange rate
+ * Convert prices ONLY on checkout page
  */
 add_filter('woocommerce_product_get_price', 'theme_convert_product_price', 10, 2);
 add_filter('woocommerce_product_get_regular_price', 'theme_convert_product_price', 10, 2);
@@ -118,6 +124,11 @@ add_filter('woocommerce_variation_prices_sale_price', 'theme_convert_product_pri
 function theme_convert_product_price($price, $product) {
     if (!$price) {
         return $price;
+    }
+    
+    // ONLY convert on checkout page
+    if ( ! is_checkout() ) {
+        return $price; // No conversion outside checkout
     }
     
     // Check if WooCommerce session exists
@@ -132,14 +143,6 @@ function theme_convert_product_price($price, $product) {
     }
     
     return $price;
-}
-
-/**
- * Convert cart totals
- */
-add_filter('woocommerce_cart_item_price', 'theme_convert_cart_item_price', 10, 3);
-function theme_convert_cart_item_price($price, $cart_item, $cart_item_key) {
-    return $price; // Already handled by product price filters
 }
 
 /**
@@ -159,7 +162,7 @@ function theme_display_currency_notice() {
         
         wc_print_notice(
             sprintf(
-                __('Prices are displayed in %s (%s). Base currency: LKR', 'mytheme'),
+                __('💱 Prices are displayed in %s (%s). Base currency: Sri Lankan Rupees (Rs.)', 'mytheme'),
                 $selected_currency,
                 $symbol
             ),
@@ -199,6 +202,7 @@ function theme_display_order_currency_in_admin($order) {
     
     if ($currency) {
         echo '<p><strong>' . __('Order Currency', 'mytheme') . ':</strong> ' . esc_html($currency) . '</p>';
+        
         if ($rate) {
             echo '<p><strong>' . __('Exchange Rate', 'mytheme') . ':</strong> ' . esc_html($rate) . '</p>';
         }

@@ -138,11 +138,6 @@ function theme_custom_shop_header() {
                     ?>
                 </div>
 
-                <!-- Sorting Dropdown -->
-                <div class="shop-sorting">
-                    <?php woocommerce_catalog_ordering(); ?>
-                </div>
-
                 <!-- Clear Filters -->
                 <?php if ( isset($_GET['product_cat']) || isset($_GET['s']) ) : ?>
                     <a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>" class="clear-filters-btn">
@@ -190,6 +185,7 @@ function theme_customize_search_title( $title ) {
  * Replace "Add to Cart" button with cart icon on shop page
  */
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+
 add_action( 'woocommerce_after_shop_loop_item', 'theme_custom_cart_icon_button', 10 );
 
 function theme_custom_cart_icon_button() {
@@ -226,11 +222,11 @@ function theme_custom_cart_icon_button() {
 }
 
 /**
- * Add custom color data attribute for variation swatches
- * This allows you to define custom colors for color attributes
+ * Variation Swatches Data
+ * 
  */
 function add_variation_swatch_color_data() {
-    // You can customize this array to map your color attribute values to actual colors
+    
     $color_map = array(
         'red' => '#ff0000',
         'blue' => '#0000ff',

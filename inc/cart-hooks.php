@@ -41,6 +41,11 @@ function theme_update_header_mini_cart( $fragments ) {
  * 1= how many arguments the function accepts
  * 10= priority of execution (lower number = higher priority)
  */
+
+/**
+ * $cart (WooCommerce cart object) -It contains:
+*Products , Subtotal , Taxes , Fees , Totals
+ */
 add_action( 'woocommerce_cart_calculate_fees', 'theme_auto_discount_on_subtotal', 10, 1 );
 function theme_auto_discount_on_subtotal( $cart ) {
 
@@ -57,6 +62,7 @@ function theme_auto_discount_on_subtotal( $cart ) {
 
     // Get cart subtotal (before discounts and shipping)
     $subtotal = $cart->get_subtotal();
+    //get_subtotal() - encapsulated method of WC_Cart class
     
     // Get settings from admin
     $threshold = (float) get_option( 'auto_discount_threshold', 20000 );
@@ -71,16 +77,20 @@ function theme_auto_discount_on_subtotal( $cart ) {
         if ( $discount_type === 'percentage' ) {
             $discount_amount = ( $subtotal * $discount_percentage ) / 100;
             $discount_label = sprintf( 
-                __( 'Automatic Discount (%s%%)', 'mytheme' ), 
+                __( 'Special offer (%s%%)', 'mytheme' ), 
                 $discount_percentage 
             );
         } else {
             $discount_amount = $discount_fixed;
-            $discount_label = __( 'Automatic Discount', 'mytheme' );
+            $discount_label = __( 'Special offer', 'mytheme' );
         }
         
-        // Add discount as a negative fee
+        // Add discount as a negative fee bcs by default woocommerce only supports fees
+        //add_fee() normally adds extra charges, but by passing a negative value create a discount
+        //false = tax status (not taxable)
+
         $cart->add_fee( $discount_label, -$discount_amount, false );
+        //add fee - abstract method of WC_Cart class
         
         error_log( sprintf( 
             'Auto Discount Applied: Type: %s, Subtotal: %s LKR, Discount: %s LKR', 
@@ -177,16 +187,16 @@ function theme_display_checkout_discount_message() {
 
 
 /**
- * Add settings section for automatic discounts
+ * Add settings section for  discounts
  */
 add_filter( 'woocommerce_get_sections_products', 'theme_add_discount_section' );
 function theme_add_discount_section( $sections ) {
-    $sections['auto_discount'] = __( 'Automatic Discounts', 'mytheme' );
+    $sections['auto_discount'] = __( ' Discounts', 'mytheme' );
     return $sections;
 }
 
 /**
- * Add settings fields for automatic discounts
+ * Add settings fields for  discounts
  */
 add_filter( 'woocommerce_get_settings_products', 'theme_add_discount_settings', 10, 2 );
 function theme_add_discount_settings( $settings, $current_section ) {

@@ -155,7 +155,20 @@ function custom_checkout_order_review() {
     ?>
     <div class="checkout-review-order-container">
         <h3 class="checkout-review-heading"><?php esc_html_e( 'Your Order', 'mytheme' ); ?></h3>
-        
+        <!--  COUPON FORM -->
+        <?php if ( wc_coupons_enabled() ) : ?>
+            <div class="checkout-coupon-form">
+                <form class="checkout_coupon" method="post">
+                    <p class="form-row form-row-first">
+                        <input type="text" name="coupon_code" class="input-text" placeholder="<?php esc_attr_e( 'Coupon code', 'woocommerce' ); ?>" id="coupon_code" value="" />
+                    </p>
+                    <p class="form-row form-row-last">
+                        <button type="submit" class="button apply-coupon" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'woocommerce' ); ?>"><?php esc_html_e( 'Apply', 'woocommerce' ); ?></button>
+                    </p>
+                </form>
+            </div>
+        <?php endif; ?>
+
         <!-- Custom Cart Items Display -->
         <div class="checkout-cart-items">
             <?php

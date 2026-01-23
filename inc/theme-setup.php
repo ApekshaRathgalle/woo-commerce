@@ -41,8 +41,8 @@ function mytheme_assets (){
          wp_enqueue_script( 
              'variation-buttons', 
              get_template_directory_uri() . '/assets/js/variation-buttons.js', 
-             array('jquery', 'wc-add-to-cart-variation'), // Added proper dependency
-             filemtime( get_template_directory() . '/assets/js/variation-buttons.js' ), // Cache busting
+             array('jquery', 'wc-add-to-cart-variation'), 
+             filemtime( get_template_directory() . '/assets/js/variation-buttons.js' ), 
              true 
          );
      }

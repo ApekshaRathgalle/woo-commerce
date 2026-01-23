@@ -14,6 +14,7 @@ require_once get_template_directory() . '/inc/cart-hooks.php';
 require_once get_template_directory() . '/inc/checkout-hooks.php';
 require_once get_template_directory() . '/inc/shipping-hooks.php';
 require_once get_template_directory() . '/inc/currency-hooks.php';
+require_once get_template_directory() . '/inc/bundle-hooks.php';
 
 
 //enqueue scripts and styles
