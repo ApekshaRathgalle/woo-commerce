@@ -25,7 +25,7 @@ function theme_add_bundle_settings( $settings, $current_section ) {
     }
     
     $bundle_settings = array();
-    
+   
     // Section Title
     $bundle_settings[] = array(
         'name' => __( 'Bundle Discount Settings', 'mytheme' ),
@@ -43,7 +43,7 @@ function theme_add_bundle_settings( $settings, $current_section ) {
         'default' => 'yes',
     );
     
-    //  Category Selection**
+    //  Category Selection
     $bundle_settings[] = array(
         'name'    => __( 'Apply to Categories', 'mytheme' ),
         'desc'    => __( 'Select categories where bundle discounts apply (leave empty for all products)', 'mytheme' ),
